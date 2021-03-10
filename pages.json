@@ -1,0 +1,48 @@
+{
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "HOME"
+			}
+		},
+		{
+			"path": "pages/me/me",
+			"style": {
+				"navigationBarTitleText": "ME"
+			}
+		}
+	],
+	"tabBar": {
+		"color": "#cdcdcd",
+		"selectedColor": "#f38313",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"height": "50px",
+		"fontSize": "10px",
+		"iconWidth": "24px",
+		"spacing": "3px",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "static/tab-icon/unselect/home.png",
+			"selectedIconPath": "static/tab-icon/select/home.png",
+			"text": "HOME"
+		}, {
+			"pagePath": "pages/me/me",
+			"iconPath": "static/tab-icon/unselect/me.png",
+			"selectedIconPath": "static/tab-icon/unselect/me.png",
+			"text": "ME"
+		}]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#f38313",
+		"backgroundColor": "#F8F8F8",
+		"app-plus": {
+			"background": "#efeff4"
+		}
+	}
+}
