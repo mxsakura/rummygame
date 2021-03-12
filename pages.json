@@ -5,13 +5,23 @@
 	"pages": [{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "HOME"
+				"navigationBarTitleText": "HOME",
+				"enablePullDownRefresh": true
+			},
+			"app-plus": {
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/me/me",
 			"style": {
 				"navigationBarTitleText": "ME"
+			}
+		},
+		{
+			"path": "pages/details/details",
+			"style": {
+				"navigationBarTitleText": ""
 			}
 		}
 	],
@@ -32,7 +42,7 @@
 		}, {
 			"pagePath": "pages/me/me",
 			"iconPath": "static/tab-icon/unselect/me.png",
-			"selectedIconPath": "static/tab-icon/unselect/me.png",
+			"selectedIconPath": "static/tab-icon/select/me.png",
 			"text": "ME"
 		}]
 	},
@@ -42,7 +52,8 @@
 		"navigationBarBackgroundColor": "#f38313",
 		"backgroundColor": "#F8F8F8",
 		"app-plus": {
-			"background": "#efeff4"
+			// 将回弹属性关掉
+			"bounce": "none"
 		}
 	}
 }
