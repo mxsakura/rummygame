@@ -35,16 +35,7 @@ export default {
 						function() {
 							console.log('install success...');
 							uni.hideLoading();
-							uni.showModal({
-								content: 'Update successful, please restart',
-								showCancel: false,
-								success: function(res) {
-									if (res.confirm) {
-										console.log('用户点击确定');
-										plus.runtime.quit();
-									}
-								}
-							});
+							plus.runtime.restart();
 						},
 						function(e) {
 							console.error('install fail...');
