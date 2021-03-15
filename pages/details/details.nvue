@@ -1,0 +1,264 @@
+<template>
+	<view class="wrap" v-if="appRoute">
+		<view class="appWrap">
+			<view class="appicon">
+				<image class="appicon-img" :src="appRoute.icon"></image>
+			</view>
+			<view class="appname">
+				<view class="appname-line"><text class="appname-line1">{{appRoute.name}}</text></view>
+				<view class="appname-line"><text class="appname-line2">111</text></view>
+			</view>
+		</view>
+		<view class="tipsWrap">
+			<view class="tips-container">
+				<text class="tips-title">4.1</text>
+				<text class="tips-text">434万条评论</text>
+			</view>
+			<view class="tips-line"></view>
+			<view class="tips-container">
+				<text class="tips-title">超过1亿次</text>
+				<text class="tips-text">下载</text>
+			</view class="tips-container">
+			<view class="tips-line"></view>
+			<view class="tips-container">
+				<view class="tips-title">
+				</view>
+				<text class="tips-text">编辑精选</text>
+			</view>
+			<view class="tips-line"></view>
+			<view class="tips-container">
+				<view class="tips-title">
+				</view>
+				<text class="tips-text">7岁以上</text>
+			</view>
+		</view>
+		<view class="install">
+			<text class="install-text">Download</text>
+		</view>
+		<view class="media">
+			<scroll-view class="mediaWrap" scroll-x="true">
+				<view class="mediaItem" v-for="(item,index) in media" :key="index" @click="previewImage(item)">
+					<image :src="item.url" mode="heightFix" v-if="item.type=='image'"></image>
+					<view class="video" v-else>
+						<video id="myVideo" :src="item.url" object-fit="fill" :controls="false" :enable-play-gesture="false"
+							:enable-progress-gesture="false" :show-center-play-btn="disable" autoplay @play="play"
+							@pause="pause" @ended="pause">
+							<cover-view class="controls-view">
+								<cover-image class="controls-play" v-if="videoPlayBtnStatus" @click="play"
+									src="/static/video/play.png"></cover-image>
+							</cover-view>
+						</video>
+					</view>
+				</view>
+			</scroll-view>
+		</view>
+		<view class="detils">
+			<text class="detils-title">About this game</text>
+			<text class="detils-content">
+				Cut the wood.
+				Build your town.
+				Build towers.
+				Kill the enemies.
+				Enjoy!
+			</text>
+		</view>
+		<view class="score">
+			<text class="score-title">Score for this application</text>
+			<text class="score-content"></text>
+			<uni-rate :readonly="true" allow-half :value="value" />
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				appRoute: null,
+				media: [{
+						type: 'video',
+						url: '/static/video/video.mp4'
+					},
+					{
+						type: 'image',
+						url: '/static/detailsimg/1.jpg'
+					},
+					{
+						type: 'image',
+						url: '/static/detailsimg/2.jpg'
+					},
+					{
+						type: 'image',
+						url: '/static/detailsimg/3.jpg'
+					},
+					{
+						type: 'image',
+						url: '/static/detailsimg/4.jpg'
+					},
+					{
+						type: 'image',
+						url: '/static/detailsimg/5.jpg'
+					}
+				],
+				count: 4,
+				value: 3.5,
+				videoPlayBtnStatus: false,
+				videoContext:null,
+			}
+		},
+		onReady(res) {
+			this.videoContext = uni.createVideoContext('myVideo')
+		},
+		onLoad(option) {
+			this.appRoute = JSON.parse(option.info)
+		},
+		methods: {
+			previewImage(item) {
+				if (item.type == "image") {
+					//获取图片
+					let image = item.url;
+					//获取列表image
+					let images = (this.media.filter(item => item.type == "image")).map(item => item.url)
+					console.log(images, 'images')
+					let index = images.findIndex(item => item == image)
+					console.log(index, 'index')
+					// 预览图片
+					uni.previewImage({
+						current: index,
+						urls: images,
+						loop: true
+					})
+				}
+
+			},
+			play() {
+				this.videoContext.play();
+				this.videoPlayBtnStatus = false;
+			},
+			pause() {
+				this.videoPlayBtnStatus = true;
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	.wrap {
+		padding: 30rpx;
+	}
+
+	.appWrap {
+		flex-direction: row;
+	}
+
+	.appicon {
+		width: 150rpx;
+		height: 150rpx;
+	}
+
+	.appicon-img {
+		width: 150rpx;
+		height: 150rpx;
+		border-radius: 25%;
+	}
+
+	.appname {
+		width: 500rpx;
+		margin-left: 50rpx;
+	}
+
+	.appname-line1 {
+		font-size: 50rpx;
+		font-weight: bold;
+	}
+
+	.appname-line2 {
+		font-size: 30rpx;
+		margin-top: 20rpx;
+	}
+
+	.tipsWrap {
+		margin-top: 20rpx;
+		flex-direction: row;
+	}
+
+	.tips-line {
+		border-left: 1px solid #ccc;
+		height: 40rpx;
+	}
+
+	.tips-container {
+		width: 180rpx;
+	}
+
+	.tips-title {
+		text-align: center;
+		font-size: 26rpx;
+	}
+
+	.tips-text {
+		text-align: center;
+		font-size: 24rpx;
+		color: #333333;
+	}
+
+	.install {
+		margin-top: 30rpx;
+		padding: 20rpx 0;
+		background: #f38313;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.install-text {
+		font-size: 30rpx;
+		color: #FFFFFF;
+	}
+
+	.media {
+		margin-top: 30rpx;
+	}
+
+	.mediaWrap {
+		width: 750rpx;
+		flex-direction: row;
+	}
+
+	.mediaItem {
+		height: 400rpx;
+		margin-right: 30rpx;
+
+	}
+
+	.mediaItem:last-child {
+		margin-right: 0;
+	}
+
+	.controls-view {
+		height: 400rpx;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.controls-play {
+		width: 150rpx;
+		height: 150rpx;
+	}
+
+	.detils {
+		margin-top: 20rpx;
+	}
+
+	.detils-title {
+		font-size: 32rpx;
+		font-weight: bold;
+	}
+
+	.detils-content {
+		font-size: 26rpx;
+	}
+
+	.score-content {
+		font-size: 26rpx;
+	}
+</style>

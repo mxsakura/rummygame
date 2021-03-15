@@ -16,7 +16,6 @@
 				</view>
 			</view>
 		</view>
-
 		<view class="hotgame">
 			<view class="title">Recommended</view>
 			<view class="rec-box">

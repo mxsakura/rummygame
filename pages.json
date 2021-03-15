@@ -23,6 +23,13 @@
 			"style": {
 				"navigationBarTitleText": ""
 			}
+		},
+		{
+			"path": "pages/beforeupdate/beforeupdate",
+			"style": {
+				"titleNView": false,
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"tabBar": {
