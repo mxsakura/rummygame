@@ -1,15 +1,17 @@
 <template>
-	<view class="wrap" v-if="appRoute">
+	<view class="wrap" v-if="appData">
 		<view class="appWrap">
-			<view class="appicon"><image class="appicon-img" :src="appRoute.icon"></image></view>
+			<view class="appicon"><image class="appicon-img" :src="appData.icon"></image></view>
 			<view class="appname">
 				<view class="appname-line">
-					<text class="appname-line1">{{ appRoute.name }}</text>
+					<text class="appname-line1">{{ appData.name }}</text>
 				</view>
-				<view class="appname-line"><text class="appname-line2">111</text></view>
+				<view class="appname-line">
+					<text class="appname-line2">{{ appData.applied }} Applied</text>
+				</view>
 			</view>
 		</view>
-		<view class="tipsWrap">
+		<!-- <view class="tipsWrap">
 			<view class="tips-container">
 				<text class="tips-title">4.1</text>
 				<text class="tips-text">434万条评论</text>
@@ -29,11 +31,11 @@
 				<view class="tips-title"></view>
 				<text class="tips-text">7岁以上</text>
 			</view>
-		</view>
-		<view class="install"><text class="install-text">Download</text></view>
+		</view> -->
+		<button class="install" @tap="download"><text class="install-text">Download</text></button>
 		<view class="media">
 			<scroll-view class="mediaWrap" scroll-x="true">
-				<view class="mediaItem" v-for="(item, index) in media" :key="index" @click="previewImage(item)">
+				<view class="mediaItem" v-for="(item, index) in appData.media" :key="index" @click="previewImage(item)">
 					<image :src="item.url" mode="heightFix" v-if="item.type == 'image'"></image>
 					<view class="video" v-else>
 						<video
@@ -58,59 +60,30 @@
 			</scroll-view>
 		</view>
 		<view class="detils">
-			<text class="detils-title">About this game</text>
-			<text class="detils-content">Cut the wood. Build your town. Build towers. Kill the enemies. Enjoy!</text>
-		</view>
-		<view class="score">
-			<text class="score-title">Score for this application</text>
-			<text class="score-content"></text>
-			<uni-rate :readonly="true" allow-half :value="value" />
+			<text class="detils-title">Details</text>
+			<text class="detils-content">{{ appData.details }}</text>
 		</view>
 	</view>
 </template>
 
 <script>
+import NotifiUtil from '@/common/js/js_sdk/notification/util.js';
 export default {
 	data() {
 		return {
-			appRoute: null,
-			media: [
-				{
-					type: 'video',
-					url: '/static/video/video.mp4'
-				},
-				{
-					type: 'image',
-					url: '/static/detailsimg/1.jpg'
-				},
-				{
-					type: 'image',
-					url: '/static/detailsimg/2.jpg'
-				},
-				{
-					type: 'image',
-					url: '/static/detailsimg/3.jpg'
-				},
-				{
-					type: 'image',
-					url: '/static/detailsimg/4.jpg'
-				},
-				{
-					type: 'image',
-					url: '/static/detailsimg/5.jpg'
-				}
-			],
+			appData: null,
 			count: 4,
 			value: 3.5,
 			videoPlayBtnStatus: false,
-			videoContext: null
+			videoContext: null,
+			downloadStatus: false
 		};
 	},
 	onReady(res) {
 		this.videoContext = uni.createVideoContext('myVideo');
 	},
 	onLoad(option) {
-		this.appRoute = JSON.parse(option.info);
+		this.appData = JSON.parse(option.info);
 	},
 	methods: {
 		previewImage(item) {
@@ -136,6 +109,87 @@ export default {
 		},
 		pause() {
 			this.videoPlayBtnStatus = true;
+		},
+		download() {
+			if (!this.downloadStatu) {
+				this.downloadStatus = true;
+				plus.runtime.openURL(this.appData.srcUrl);
+			}
+			// if (plus.os.name == "Android") {
+			//     let appurl = "market://details?id=com.noorgames.timbercraft"; //这个是通用应用市场，如果想指定某个应用商店，需要单独查这个应用商店的包名或scheme及参数
+			//     plus.runtime.openURL(appurl);
+			// }
+			// var appname='智慧工地'+'-V'+'1.0.0'
+			// var NotificationUtil=NotifiUtil()//实例创建
+			// NotificationUtil.setNotification(appname, "开始下载! ");
+			// var dtask = plus.downloader.createDownload('http://mewajump.com/apk/test.apk', {}, function(d, status) {
+			// 	uni.showToast({
+			// 		title: '下载完成',
+			// 		mask: false,
+			// 		duration: 1000
+			// 	});
+			// 	// 下载完成
+			// 	if (status == 200) {
+			// 		plus.runtime.install(plus.io.convertLocalFileSystemURL(d.filename), {}, e => e, function(error) {
+			// 			uni.showToast({
+			// 				title: '安装失败-01',
+			// 				mask: false,
+			// 				duration: 1500
+			// 			});
+			// 		});
+			// 	} else {
+			// 		uni.showToast({
+			// 			title: '更新失败-02',
+			// 			mask: false,
+			// 			duration: 1500
+			// 		});
+			// 	}
+			// });
+			// try {
+			// 	dtask.start(); // 开启下载的任务
+			// 	var prg = 0;
+			// 	var showLoading = plus.nativeUI.showWaiting('正在下载'); //创建一个showWaiting对象
+			// 	dtask.addEventListener('statechanged', function(task, status) {
+			// 		// 给下载任务设置一个监听 并根据状态  做操作
+			// 		switch (task.state) {
+			// 			case 1:
+			// 				showLoading.setTitle('正在下载');
+			// 				break;
+			// 			case 2:
+			// 				showLoading.setTitle('已连接到服务器');
+			// 				break;
+			// 			case 3:
+			// 				NotificationUtil.setProgress(Math.round((task.downloadedSize / task.totalSize) * 100), appname);
+			// 				prg = parseInt((parseFloat(task.downloadedSize) / parseFloat(task.totalSize)) * 100);
+			// 				showLoading.setTitle('  正在下载' + prg + '%  ');
+			// 				break;
+			// 			case 4:
+			// 				plus.nativeUI.closeWaiting();
+			// 				NotificationUtil.clearNotification();
+			// 				//下载完成
+			// 				break;
+			// 		}
+			// 	});
+			// } catch (err) {
+			// 	plus.nativeUI.closeWaiting();
+			// 	uni.showToast({
+			// 		title: '下载失败-03',
+			// 		mask: false,
+			// 		duration: 1500
+			// 	});
+			// }
+			// let wv = plus.webview.create('', 'custom-webview', {
+			// 	plusrequire: 'none', //禁止远程网页使用plus的API，有些使用mui制作的网页可能会监听plus.key，造成关闭页面混乱，可以通过这种方式禁止
+			// 	'uni-app': 'none', //不加载uni-app渲染层框架，避免样式冲突
+			// 	top: uni.getSystemInfoSync().statusBarHeight + 44 //放置在titleNView下方。如果还想在webview上方加个地址栏的什么的，可以继续降低TOP值
+			// });
+			// // wv.loadURL('http://mewajump.com/apk/test.apk');
+			// wv.loadURL('https://play.google.com/store/apps/details?id=com.noorgames.timbercraft');
+			// var currentWebview = this.$scope.$getAppWebview(); //此对象相当于html5plus里的plus.webview.currentWebview()。在uni-app里vue页面直接使用plus.webview.currentWebview()无效，非v3编译模式使用this.$mp.page.$getAppWebview()
+			// currentWebview.append(wv); //一定要append到当前的页面里！！！才能跟随当前页面一起做动画，一起关闭
+			// setTimeout(function() {
+			// 	console.log(wv.getStyle());
+			// }, 1000); //如果是首页的onload调用时需要延时一下，二级页面无需延时，可直接获取
 		}
 	}
 };
@@ -248,15 +302,14 @@ export default {
 }
 
 .detils-title {
-	font-size: 32rpx;
-	font-weight: bold;
+	margin: 30rpx 0;
+	font-size: 38rpx;
+	color: #666666;
 }
 
 .detils-content {
-	font-size: 26rpx;
-}
-
-.score-content {
-	font-size: 26rpx;
+	font-size: 32rpx;
+	color: #888888;
+	line-height: 48rpx;
 }
 </style>

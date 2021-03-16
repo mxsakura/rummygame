@@ -16,7 +16,17 @@
             "delay" : 0
         },
         "modules" : {
-            "VideoPlayer" : {}
+            "VideoPlayer" : {},
+            "Bluetooth" : {}
+        },
+        "confusion" : {
+            "description" : "NVUE原生混淆",
+            "resources" : {
+                "pages/details/details.nvue" : {}
+            }
+        },
+        "notification" : {
+            "description" : "通知栏"
         },
         /* 模块配置 */
         "distribute" : {
@@ -45,7 +55,8 @@
             "ios" : {},
             /* ios打包配置 */
             "sdkConfigs" : {
-                "ad" : {}
+                "ad" : {},
+                "push" : {}
             },
             "splashscreen" : {
                 "androidStyle" : "common"
@@ -68,5 +79,14 @@
             "id" : "google",
             "name" : "GooglePlay"
         }
-    ]
+    ],
+    // ...
+    "permissions" : {
+        // ...
+        "Push" : {
+            "description" : "消息推送"
+        }
+    }
 }
+/* 模块配置 *//* 应用发布信息 *//* android打包配置 *//* ios打包配置 */
+

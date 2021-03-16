@@ -25,22 +25,22 @@
 		
 		<view class="u-m-t-20">
 			<u-cell-group>
-				<u-cell-item icon="rmb-circle" title="支付"></u-cell-item>
+				<u-cell-item icon="rmb-circle" title="payment"></u-cell-item>
 			</u-cell-group>
 		</view>
 		
 		<view class="u-m-t-20">
 			<u-cell-group>
-				<u-cell-item icon="star" title="收藏"></u-cell-item>
-				<u-cell-item icon="photo" title="相册"></u-cell-item>
-				<u-cell-item icon="coupon" title="卡券"></u-cell-item>
-				<u-cell-item icon="heart" title="关注"></u-cell-item>
+				<u-cell-item icon="star" title="Collection"></u-cell-item>
+				<u-cell-item icon="photo" title="album"></u-cell-item>
+				<u-cell-item icon="coupon" title="Card coupon"></u-cell-item>
+				<u-cell-item icon="heart" title="follow"></u-cell-item>
 			</u-cell-group>
 		</view>
 		
 		<view class="u-m-t-20">
 			<u-cell-group>
-				<u-cell-item icon="setting" title="设置"></u-cell-item>
+				<u-cell-item icon="setting" title="setting"></u-cell-item>
 			</u-cell-group>
 		</view>
 	</view>
