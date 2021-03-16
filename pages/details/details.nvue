@@ -1,7 +1,7 @@
 <template>
 	<view class="wrap" v-if="appData">
 		<view class="appWrap">
-			<view class="appicon"><image class="appicon-img" :src="appData.icon"></image></view>
+			<view class="appicon"><image class="appicon-img" :src="'https://s.nooapp.com/page' + appData.icon"></image></view>
 			<view class="appname">
 				<view class="appname-line">
 					<text class="appname-line1">{{ appData.name }}</text>
@@ -36,11 +36,11 @@
 		<view class="media">
 			<scroll-view class="mediaWrap" scroll-x="true">
 				<view class="mediaItem" v-for="(item, index) in appData.media" :key="index" @click="previewImage(item)">
-					<image :src="item.url" mode="heightFix" v-if="item.type == 'image'"></image>
+					<image :src="'https://s.nooapp.com/page' + item.url" mode="heightFix" v-if="item.type == 'image'"></image>
 					<view class="video" v-else>
 						<video
 							id="myVideo"
-							:src="item.url"
+							:src="'https://s.nooapp.com/page' + item.url"
 							object-fit="fill"
 							:controls="false"
 							:enable-play-gesture="false"
@@ -91,10 +91,8 @@ export default {
 				//获取图片
 				let image = item.url;
 				//获取列表image
-				let images = this.media.filter(item => item.type == 'image').map(item => item.url);
-				console.log(images, 'images');
+				let images = this.appData.media.filter(item => item.type == 'image').map(item => item.url);
 				let index = images.findIndex(item => item == image);
-				console.log(index, 'index');
 				// 预览图片
 				uni.previewImage({
 					current: index,
@@ -228,6 +226,7 @@ export default {
 .appname-line2 {
 	font-size: 30rpx;
 	margin-top: 20rpx;
+	color: #888888;
 }
 
 .tipsWrap {

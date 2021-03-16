@@ -6,12 +6,14 @@
 			<view class="title">Recommended</view>
 			<view class="rec-box">
 				<view class="rec-box-item" v-for="(item, index) in recommended" :key="index" @click="router(item)">
-					<view class="rec-box-item-img" :class="{ 'rec-box-item-img-center': index == 1 }"><image :src="item.icon"></image></view>
+					<view class="rec-box-item-img" :class="{ 'rec-box-item-img-center': index == 1 }"><image :src="$methods.addHost(item.icon)"></image></view>
 					<view class="rec-box-item-text">
 						<view class="appname" :class="{ 'appname-center': index == 1 }">
 							<text>{{ item.name }}</text>
 						</view>
-						<view class="appnum"><text>{{item.applied}} Applied</text></view>
+						<view class="appnum">
+							<text>{{ item.applied }} Applied</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -21,13 +23,15 @@
 			<view class="rec-box">
 				<view class="rec-box-item" v-for="(item, index) in hotgames" :key="index" @click="router(item)">
 					<view class="left">
-						<view class="rec-box-item-img"><image :src="item.icon"></image></view>
+						<view class="rec-box-item-img"><image :src="$methods.addHost(item.icon)"></image></view>
 						<view class="rec-box-item-text">
 							<view class="appname">
 								<text>{{ item.name }}</text>
 							</view>
 							<!-- <view class="appname"><text>super</text></view> -->
-							<view class="appnum"><text>{{item.applied}} Applied</text></view>
+							<view class="appnum">
+								<text>{{ item.applied }} Applied</text>
+							</view>
 						</view>
 					</view>
 					<view class="right"><u-button type="warning" size="mini" @click="router(item)">Download</u-button></view>
@@ -49,14 +53,24 @@ export default {
 			hotgames: []
 		};
 	},
-	onLoad() {
-		console.log(appJson);
-		uni.setStorageSync('appData', appJson);
-		let appData = uni.getStorageSync('appData');
-		this.banner = appData.banner;
-		this.notice = appData.notice;
-		this.recommended = appJson.games.slice(0, 3);
-		this.hotgames = appJson.games.slice(3, appJson.games.length);
+	async onLoad() {
+		var [error, res] = await uni.request({
+			url: 'https://s.nooapp.com/page/app.json'
+		});
+		if (error) {
+			console.log(error);
+		} else {
+			console.log(res.data);
+			uni.setStorageSync('appData', res.data);
+			let appData = uni.getStorageSync('appData');
+			this.banner = appData.banner.map(item => {
+				item.image = this.$methods.addHost(item.image);
+				return item;
+			});
+			this.notice = appData.notice;
+			this.recommended = appJson.games.slice(0, 3);
+			this.hotgames = appJson.games.slice(3, appJson.games.length);
+		}
 	},
 	methods: {
 		bannerTo(index) {
