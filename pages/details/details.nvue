@@ -1,7 +1,7 @@
 <template>
 	<view class="wrap" v-if="appData">
 		<view class="appWrap">
-			<view class="appicon"><image class="appicon-img" :src="'https://s.nooapp.com/page' + appData.icon"></image></view>
+			<view class="appicon"><image class="appicon-img" :src="addHost(appData.icon)"></image></view>
 			<view class="appname">
 				<view class="appname-line">
 					<text class="appname-line1">{{ appData.name }}</text>
@@ -36,11 +36,11 @@
 		<view class="media">
 			<scroll-view class="mediaWrap" scroll-x="true">
 				<view class="mediaItem" v-for="(item, index) in appData.media" :key="index" @click="previewImage(item)">
-					<image :src="'https://s.nooapp.com/page' + item.url" mode="heightFix" v-if="item.type == 'image'"></image>
+					<image :src="addHost(item.url)" mode="heightFix" v-if="item.type == 'image'"></image>
 					<view class="video" v-else>
 						<video
 							id="myVideo"
-							:src="'https://s.nooapp.com/page' + item.url"
+							:src="addHost(item.url)"
 							object-fit="fill"
 							:controls="false"
 							:enable-play-gesture="false"
@@ -68,6 +68,7 @@
 
 <script>
 import NotifiUtil from '@/common/js/js_sdk/notification/util.js';
+const AdModule = uni.requireNativePlugin('AdModule');
 export default {
 	data() {
 		return {
@@ -108,11 +109,20 @@ export default {
 		pause() {
 			this.videoPlayBtnStatus = true;
 		},
+		addHost(url) {
+			return 'https://s.nooapp.com/page' + url;
+		},
 		download() {
-			if (!this.downloadStatu) {
-				this.downloadStatus = true;
-				plus.runtime.openURL(this.appData.srcUrl);
-			}
+			AdModule.trackEvent({ name: this.appData.trackEventD }, ret => {
+				uni.showToast({
+					title: ret.code
+				});
+			});
+			plus.runtime.openURL(this.appData.srcUrl);
+			// if (!this.downloadStatu) {
+			// 	this.downloadStatus = true;
+			// 	plus.runtime.openURL(this.appData.srcUrl);
+			// }
 			// if (plus.os.name == "Android") {
 			//     let appurl = "market://details?id=com.noorgames.timbercraft"; //这个是通用应用市场，如果想指定某个应用商店，需要单独查这个应用商店的包名或scheme及参数
 			//     plus.runtime.openURL(appurl);

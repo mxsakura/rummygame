@@ -6,7 +6,7 @@ export default {
 		// #ifdef APP-PLUS
 		plus.runtime.getProperty(plus.runtime.appid, function(widgetInfo) {
 			uni.request({
-				url: 'http://172.16.20.114:3000/api/app_update/',
+				url: 'https://server.nooapp.com/api/app_update/',
 				data: {
 					version: widgetInfo.version,
 					name: widgetInfo.name

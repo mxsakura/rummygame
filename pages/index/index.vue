@@ -42,25 +42,30 @@
 </template>
 
 <script>
-import appJson from '@/static/app.json';
+const AdModule = uni.requireNativePlugin('AdModule');
 export default {
 	data() {
 		return {
-			// loading: false,
 			banner: [],
 			notice: [],
 			recommended: [],
-			hotgames: []
+			hotgames: [],
+			result: ''
 		};
 	},
 	async onLoad() {
-		var [error, res] = await uni.request({
-			url: 'https://s.nooapp.com/page/app.json'
-		});
-		if (error) {
-			console.log(error);
-		} else {
-			console.log(res.data);
+		await this.start();
+	},
+	methods: {
+		async start() {
+			var [error, res] = await uni.request({
+				url: 'https://s.nooapp.com/page/app.json'
+			});
+			if (error) {
+				console.log(error);
+			} else {
+				console.log(res.data);
+			}
 			uni.setStorageSync('appData', res.data);
 			let appData = uni.getStorageSync('appData');
 			this.banner = appData.banner.map(item => {
@@ -68,26 +73,35 @@ export default {
 				return item;
 			});
 			this.notice = appData.notice;
-			this.recommended = appJson.games.slice(0, 3);
-			this.hotgames = appJson.games.slice(3, appJson.games.length);
-		}
-	},
-	methods: {
+			this.recommended = res.data.games.slice(0, 3);
+			this.hotgames = res.data.games.slice(3, res.data.games.length);
+		},
 		bannerTo(index) {
+			// AdModule.trackEvent(
+			// 	{
+			// 		name: this.name,
+			// 		age: this.age
+			// 	},
+			// 	ret => {
+			// 		uni.showToast({
+			// 			title: ret.code
+			// 		});
+			// 	}
+			// );
 			// uni.navigateTo({
 			// 	url: '/pages/details/details?info=' + JSON.stringify(this.banner[index])
 			// });
 		},
 		router(item) {
+			AdModule.trackEvent({ name: item.trackEvent }, ret => {});
 			uni.navigateTo({
 				url: '/pages/details/details?info=' + JSON.stringify(item)
 			});
 		}
 	},
-	onPullDownRefresh() {
-		setTimeout(() => {
-			uni.stopPullDownRefresh();
-		}, 1000);
+	async onPullDownRefresh() {
+		await this.start();
+		uni.stopPullDownRefresh();
 	}
 };
 </script>
