@@ -90,9 +90,9 @@ export default {
 		previewImage(item) {
 			if (item.type == 'image') {
 				//获取图片
-				let image = item.url;
+				let image = this.addHost(item.url);
 				//获取列表image
-				let images = this.appData.media.filter(item => item.type == 'image').map(item => item.url);
+				let images = this.appData.media.filter(item => item.type == 'image').map(item => this.addHost(item.url));
 				let index = images.findIndex(item => item == image);
 				// 预览图片
 				uni.previewImage({
@@ -113,11 +113,7 @@ export default {
 			return 'https://s.nooapp.com/page' + url;
 		},
 		download() {
-			AdModule.trackEvent({ name: this.appData.trackEventD }, ret => {
-				uni.showToast({
-					title: ret.code
-				});
-			});
+			AdModule.trackEvent({ name: this.appData.trackEventD }, ret => {});
 			plus.runtime.openURL(this.appData.srcUrl);
 			// if (!this.downloadStatu) {
 			// 	this.downloadStatus = true;
